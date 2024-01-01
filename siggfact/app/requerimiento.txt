@@ -1,0 +1,13 @@
+asgiref==3.7.2
+astroid==3.0.1
+colorama==0.4.6
+dill==0.3.7
+Django==4.2.7
+isort==5.12.0
+mccabe==0.7.0
+platformdirs==3.11.0
+psycopg2==2.9.9
+pylint==3.0.2
+sqlparse==0.4.4
+tomlkit==0.12.2
+tzdata==2023.3

@@ -442,8 +442,8 @@
     <!-- Page level plugins -->
     <script src="{% static 'base/vendor/datatables/jquery.dataTables.min.js'%}"></script>
     <script src="{% static 'base/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>    
+    <script src="{% static 'base/vendor/jquery_confirm/jquery-confirm.min.js' %}"></script>
 
-    <script src="{% static 'base/vendor/jquery_confirm/jquery-confirm.min.js' %}"></script>    
 
   {% block control_modal%}
   <script>
@@ -477,7 +477,6 @@
         color="red";
       }
 
-
       $.alert({
         title:'',
         theme:'material',
@@ -495,14 +494,7 @@
 
   </script>
   {% endblock%}
-
-
-
-
-
-
-
-    {% block js_page %} {% endblock js_page %} 
+  {% block js_page %} {% endblock js_page %} 
 
 </body>
 

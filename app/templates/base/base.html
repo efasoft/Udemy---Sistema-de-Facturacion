@@ -74,13 +74,25 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Catálogos de Inventario :</h6>
-                        <a class="collapse-item" href="{% url 'inv:categoria_list' %}">Categorias</a>
-                        <a class="collapse-item" href="{% url 'inv:subcategoria_list' %}">Sub Categorias</a>                        
-                        <a class="collapse-item" href="{% url 'inv:marca_list' %}">Marca</a>   
-                        <a class="collapse-item" href="{% url 'inv:um_list' %}">Unidad de Medida</a>   
-                        <a class="collapse-item" href="{% url 'inv:producto_list' %}">Producto</a>    
+                        {% if perms.inv.view_categoria %} 
+                          <a class="collapse-item" href="{% url 'inv:categoria_list' %}">Categorias</a>
+                        {% endif %}
+                        {% if perms.inv.view_subcategoria %} 
+                          <a class="collapse-item" href="{% url 'inv:subcategoria_list' %}">Sub Categorias</a>                        
+                        {% endif %}
+                        {% if perms.inv.view_marca %} 
+                          <a class="collapse-item" href="{% url 'inv:marca_list' %}">Marca</a>   
+                        {% endif %}
+                        {% if perms.inv.view_unidadmedida %} 
+                          <a class="collapse-item" href="{% url 'inv:um_list' %}">Unidad de Medida</a>   
+                        {% endif %}
+                        {% if perms.inv.view_producto %} 
+                          <a class="collapse-item" href="{% url 'inv:producto_list' %}">Producto</a>    
+                        {% endif %}
                         <h6 class="collapse-header">Catálogos de Compras :</h6>                       
-                        <a class="collapse-item" href="{% url 'cmp:proveedor_list' %}">Proveedores</a>                             
+                        {% if perms.cmp.view_proveedor %} 
+                          <a class="collapse-item" href="{% url 'cmp:proveedor_list' %}">Proveedores</a>                             
+                        {% endif %}
                     </div>
                 </div>
             </li>

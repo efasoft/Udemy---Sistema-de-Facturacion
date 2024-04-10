@@ -27,6 +27,9 @@
     <!-- jQuery Confirm -->
     <link rel="stylesheet" href="{% static 'base/vendor/jquery_confirm/jquery-confirm.min.css' %}">
 
+    <!-- XDSoft DateTimePicker -->  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />  
+
 
 </head>
 
@@ -43,7 +46,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Admin<sup>PLUS</sup></div>
+                <div class="sidebar-brand-text mx-3"><sup>U.E.</sup>SAN JOSE</div>
             </a>
 
             <!-- Divider -->
@@ -96,6 +99,18 @@
                     </div>
                 </div>
             </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras" aria-expanded="true" aria-controls="collapseCompras">
+          <i class="fas fa-fw fa-truck"></i>
+          <span>Movimientos</span>
+        </a>
+        <div id="collapseCompras" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Entradas</h6>
+            <a class="collapse-item" href="{% url 'cmp:compras_list' %}">Compras</a>
+          </div>
+        </div>
+      </li>
 
             <!-- Nav Item - Utilities Collapse Menu 
             <li class="nav-item">
@@ -116,13 +131,13 @@
                 </div>
             </li>
             -->
-            <!-- Divider -->
+            <!-- Divider 
             <hr class="sidebar-divider">
-
-            <!-- Heading -->
+-->
+            <!-- Heading 
             <div class="sidebar-heading">
                 Addons
-            </div>
+            </div> -->
 
             <!-- Nav Item - Pages Collapse Menu 
             <li class="nav-item active">
@@ -135,7 +150,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
+                            <a class="collapse-item" href="login.html">Login</a>
                         <a class="collapse-item" href="register.html">Register</a>
                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
                         <div class="collapse-divider"></div>
@@ -455,6 +470,14 @@
     <script src="{% static 'base/vendor/datatables/jquery.dataTables.min.js'%}"></script>
     <script src="{% static 'base/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>    
     <script src="{% static 'base/vendor/jquery_confirm/jquery-confirm.min.js' %}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>  
+
+  <script>
+    $(document).ready(function () {
+      jQuery.datetimepicker.setLocale('es');
+    });
+  </script>
 
 
   {% block control_modal%}

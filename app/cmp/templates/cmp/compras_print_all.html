@@ -54,14 +54,16 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h4>Sistema de Compras DEBS</h4>
+                <center>
+                <h1>Sistema de Facturación y Compras - UE San Jose</h1>
                 <h3>Reporte de Compras al {{ today|date:"d/m/Y" }}</h3>
+                </center>
             </div>
 
             <table class="table">
                 <thead>
                     <tr>
-                        <th>No. Compra</th>
+                        <th>No. Factura</th>
                         <th>Proveedor</th>
                         <th>Fecha</th>
                         <th>Total</th>
@@ -69,8 +71,8 @@
                 </thead>
                 <tbody>
                     {% for item in obj %}
-                    <tr>
-                        <td>{{ item.id }}</td>
+                    <tr>                
+                        <td>{{ item.no_factura }}</td>
                         <td>{{ item.proveedor }}</td>
                         <td>{{ item.fecha_compra | date:"d/m/Y" }}</td>
                         <td>{{ item.total }}</td>

@@ -244,7 +244,7 @@ class ProductoEdit(SinPrivilegios, generic.UpdateView):
     def form_valid(self, form):
         form.instance.um = self.request.user.id
         return super().form_valid(form)
-"""    
+   
     def get_context_data(self, **kwargs):
         pk = self.kwargs.get('pk')
 
@@ -254,7 +254,7 @@ class ProductoEdit(SinPrivilegios, generic.UpdateView):
         context["obj"] = Producto.objects.filter(pk=pk).first()
 
         return context
-"""        
+      
 
 @login_required(login_url="/login/")
 @permission_required("inv.change_producto",login_url="/login/")

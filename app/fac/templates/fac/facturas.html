@@ -14,7 +14,7 @@
             <!-- Sección Superior -->
             <div class="row">
                 <!-- Sección Izquierda -->
-                <div class="col-lg-6 form-group">
+                <div class="col-lg-6">
                     <div class="content">
                         <div class="row ">
                             <div class="col-lg-1">No.:</div>
@@ -25,25 +25,12 @@
                                 Cliente:
                             </div>
                             <div class="col-lg-5 form-group">
-                                <!-- <select name="enc_cliente" id="enc_cliente" class="form-control">
+                                <select name="enc_cliente" id="enc_cliente" class="form-control">
                                     <option value="0">Seleccione Cliente</option>
                                     {% for item in clientes %}
                                         <option value="{{item.id}}">{{ item.nombres }} {{item.apellidos}} </option>
                                     {% endfor %}
-                                </select> -->
-                                <div class="row">
-                                    <div class="col-lg-11 col-md-11">
-                                        <select name="enc_cliente" id="enc_cliente" class="form-control">
-                                            <option value="0">Seleccione Cliente</option>
-                                            {% for item in clientes %}
-                                                <option value="{{item.id}}">{{ item.nombres }} {{item.apellidos}} </option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-1 col-md-1">
-                                        <button class="btn btn-outline-danger btn-sm" id="btnEditCliente"><i class="far fa-edit"></i></button>
-                                    </div>
-                                </div>
+                                </select> 
                             </div>
                         </div>
 
@@ -108,13 +95,13 @@
                         <div class="col-lg-1">Cant</div>
                         <div class="col-lg-3">
                             <input type="number" class="form-control" name="cantidad" id="cantidad" placeholder="Cantidad">
-                            <input type="hidden" class="form-control" name="existencia" id="existencia">
+                            <!-- <input type="hidden" class="form-control" name="existencia" id="existencia"> -->
                         </div>
                         <div class="col-lg-4">
                             <input type="number" class="form-control" name="precio" id="precio" placeholder="Precio" readonly>
                         </div>
                         <div class="col-lg-3">
-                            <input type="number" class="form-control" name="descuento_detalle" id="descuento_detalle" placeholder="Descuento">
+                            <input type="number" class="form-control " name="descuento_detalle" id="descuento_detalle" placeholder="Descuento">
                         </div>
                         <div class="col-lg-1">
                             <button type="submit" class="btn btn-danger" id="btnGuardar"> <i class="far fa-plus-square"></i> </button>
@@ -123,17 +110,17 @@
                     <div class="row p-1">
                         <div class="col-lg-9 text-right">Sub Total</div>
                         <div class="col-lg-3">
-                            <input type="number" class="form-control" name="sub_total_detalle" id="sub_total_detalle" placeholder="Sub Total"
+                            <input type="number" class="form-control text-right" name="sub_total_detalle" id="sub_total_detalle" placeholder="Sub Total"
                              value="0.00" disabled>
                         </div>
                     </div>
                     <div class="row p-1">
                         <div class="col-lg-9 text-right">Total</div>
                         <div class="col-lg-3">
-                            <input type="number" class="form-control" name="total_detalle" id="total_detalle" placeholder="Total"
+                            <input type="number" class="form-control text-right" name="total_detalle" id="total_detalle" placeholder="Total"
                              value="0.00" disabled>
                         </div>
-                    </div>
+                    </div> 
                 </div>
                 <!-- Fin Sección Derecha -->
             </div>
@@ -152,22 +139,24 @@
                         data-locale="es-NI"
                         >
                         <thead>
-                            <th data-sortable="true" data-field="id">Id.</th>        
+                            <!-- <th data-sortable="true" data-field="id">Id.</th>     -->    
                             <th data-sortable="true" data-field="codigo">Código</th>
                             <th data-sortable="true" data-field="descripcion">Descripción</th>
-                            <th data-field="cantidad">Cant</th>
+                            <th data-field="cantidad">Cantidad</th>
+                            <th data-field="precio">Precio U.</th>                            
                             <th data-field="subtotal">S. Total</th>
-                            <th data-field="descuento">Des.</th>
+                            <th data-field="descuento">Descuento</th>
                             <th data-field="total">Total</th>
                             <th class="all">Acciones</th>
                         </thead>
                         <tbody>
                             {% for item in det%}
                             <tr>
-                                <td>{{ item.id }}</td>
-                                <td>{{ item.producto }}</td>
+                                <!-- <td>{{ item.id }}</td> -->
+                                <td>{{ item.producto.codigo }}</td>
                                 <td>{{ item.producto.descripcion }}</td>
                                 <td>{{ item.cantidad }}</td>
+                                <td>{{ item.precio }}</td>
                                 <td>{{ item.sub_total }}</td>
                                 <td>{{ item.descuento }}</td>
                                 <td>{{ item.total }}</td>
@@ -187,7 +176,7 @@
         </div>
     </div>
 </div>
-</form>
+</form> 
 {% endblock %}
 {% block js_page %}
 <script>
@@ -228,6 +217,7 @@
 
     }
 
+
     function buscarProducto()
     {
         if ($("#enc_cliente").val()==="0" || $("#enc_cliente").val()===null){
@@ -258,6 +248,15 @@
                     return false;
                 }
 
+                if(r.precio==0){
+                    mensaje("Producto No Tiene PRECIO registrado",'orange')
+                    $("#codigo").val("");
+                    $("#descripcion").val("");
+                    $("#precio").val("0.00");
+                    $("#codigo").focus();
+                    return false;
+                }                
+
                 $("#codigo").val(r.codigo);
                 $("#descripcion").val(r.descripcion);
                 $("#precio").val(r.precio);
@@ -284,6 +283,8 @@
             }
 
         });
+
+
     }
 
     $(function () {
@@ -315,16 +316,9 @@
         $("#enc_id").val("{{ enc.id }}");
         $("#enc_cliente").val("{{ enc.cliente.id }}").change();
         $("#fecha").val("{{ enc.fecha|date:'Y-m-d' }}");
-        $("#sub_total").val("{{ enc.sub_total }}");
-        $("#descuento").val("{{ enc.descuento }}");
+        $("#sub_total").val({{ enc.sub_total }});
+        $("#descuento").val({{ enc.descuento }});
         $("#total").val({{ enc.total }});
-
-        // $('#enc_cliente').select2().select2('val', $('#enc_cliente option:eq(1)').val());
-        // https://select2.org/programmatic-control/add-select-clear-items
-        $("#enc_cliente").data('select2').trigger('select', {
-            data: {"id": 3}
-        });
-
     });
 
     function borrar_detalle(id)
@@ -391,61 +385,6 @@
                 cancelar: function(){}
                 }
         });
-    }
-
-    $("form").submit(function(e){
-        var existencia = +$("#existencia").val();
-        var cantidad = +$("#cantidad").val();
-
-        if(cantidad>existencia){
-            mensaje("No hay existencia suficiente");
-            return false;
-        }
-    })
-
-    $("#btnEditCliente").click(function(e){
-        e.preventDefault();
-
-        var idCliente = $("#enc_cliente").val();
-        var url;
-        const qs = "?t=fc";
-        // alert(idCliente)
-
-        if(idCliente===null || idCliente===undefined || idCliente==0){
-            // url = "/fac/clientes/new" + qs;
-            url = "{% url 'fac:fac_cliente_add' %}" + qs
-            //alert(url);
-            // abrir_modal(url);
-        }else{
-            url = "/fac/facturas/clientes/" + idCliente + qs;
-            //alert(url);
-            // abrir_modal(url);
-        }
-        abrir_modal(url);
-        var token = '{{csrf_token}}';
-    });
-
-$("#popup").on('hidden.bs.modal',function(){
-    const a = $("#id").val()
-    // alert(a)
-    var url="{% url 'api:cliente_list' %}"
-    $.ajax({
-        type:"GET",
-        url:url,
-        success: function(data){
-            console.log(data)
-            $("#enc_cliente").find('option').remove()
-            $("#enc_cliente").append('<option value="0">Seleccione Cliente</option>')
-            for(var i=0;i<data.length;i++){
-                $("#enc_cliente").append(`<option value="${data[i].id}">${data[i].nombres} ${data[i].apellidos} </option>`)
-            }
-            $("#enc_cliente").val(a).change()
-        },
-        error: function(data){
-            console.log(data)
-        }
-    })
-    return false
-})
+    }    
 </script>
 {% endblock %}

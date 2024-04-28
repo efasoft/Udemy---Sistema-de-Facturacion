@@ -22,6 +22,7 @@ urlpatterns = [
     path('cmp/',include(('cmp.urls','cmo'), namespace='cmp')),        
     path('inv/',include(('inv.urls','inv'), namespace='inv')),    
     path('fac/', include(('fac.urls', 'fac'), namespace='fac')),    
+    path('api/', include(('api.urls', 'api'), namespace='api')),    
     
     # Ruta Predeterminada
     path('admin/', admin.site.urls),

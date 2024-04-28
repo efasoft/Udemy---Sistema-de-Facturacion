@@ -35,7 +35,7 @@
     <div class="alert alert-info">No Hay Facturas</div>
     {% endif %}
     <div class="buttons-toolbar">
-        <a class="btn btn-success" href="{# url 'fac:factura_new' #}"><i cass="far fa-calendar-plus"></i> Agregar Nueva <b>FACTURA</a>
+        <a class="btn btn-success" href="{% url 'fac:factura_new' %}"><i cass="far fa-calendar-plus"></i> Agregar Nueva <b>FACTURA</a>
     </div>
 
     <table 
@@ -51,6 +51,7 @@
     >
     <thead>
       <th data-sortable="true" data-field="id">No.</th>        
+      <th data-sortable="true" data-field="fecha">Fecha</th>       
       <th data-sortable="true" data-field="nombres">Cliente</th>
       <th data-sortable="true" data-field="apellidos">Total</th>
       <th data-field="estado">Estado</th>
@@ -60,11 +61,12 @@
       {% for item in obj%}
       <tr>
         <td>{{ item.id }}</td>
+        <td>{{ item.fecha }}</td>
         <td>{{ item.cliente }}</td>
         <td>{{ item.total }}</td>
         <td>{{item.estado|yesno:"Activo,Inactivo"}}</td>
         <td>
-          <a href="{# url 'fac:factura_edit' item.id #}" class="href btn btn-warning btn-circle">
+          <a href="{% url 'fac:factura_edit' item.id %}" class="href btn btn-warning btn-circle">
               <i class="far fa-edit"></i>
           </a>
         </td>
@@ -79,7 +81,6 @@
 {% endblock %}
 {% block js_page %}
 <script>
-/*
 $(function(){
   $("#f1, #f2").datetimepicker({
       format: 'Y-m-d',
@@ -105,6 +106,5 @@ $(function(){
     
   });
 });
-*/
 </script>
 {% endblock %}

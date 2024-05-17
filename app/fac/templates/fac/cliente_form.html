@@ -59,12 +59,10 @@ $("#frmCliente").submit(function( e ) {
                 // alert(data);
                 // window.location.reload(true);
                 $("#id").val(data)
-                console.log(data)
                 cerrar_modal()
             },
-            error: function(data,b,c) {
+            error: function(data) {
                 alert(data);
-                console.log(c)
             }
         });
         return false;

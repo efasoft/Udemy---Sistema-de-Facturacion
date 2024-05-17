@@ -14,7 +14,7 @@
             <!-- Sección Superior -->
             <div class="row">
                 <!-- Sección Izquierda -->
-                <div class="col-lg-6">
+                <div class="col-lg-6 form-group">
                     <div class="content">
                         <div class="row ">
                             <div class="col-lg-1">No.:</div>
@@ -25,12 +25,25 @@
                                 Cliente:
                             </div>
                             <div class="col-lg-5 form-group">
-                                <select name="enc_cliente" id="enc_cliente" class="form-control">
+                                <!-- <select name="enc_cliente" id="enc_cliente" class="form-control">
                                     <option value="0">Seleccione Cliente</option>
                                     {% for item in clientes %}
                                         <option value="{{item.id}}">{{ item.nombres }} {{item.apellidos}} </option>
                                     {% endfor %}
-                                </select> 
+                                </select> -->
+                                <div class="row">
+                                    <div class="col-lg-11 col-md-11">
+                                        <select name="enc_cliente" id="enc_cliente" class="form-control">
+                                            <option value="0">Seleccione Cliente</option>
+                                            {% for item in clientes %}
+                                                <option value="{{item.id}}">{{ item.nombres }} {{item.apellidos}} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-1 col-md-1">
+                                        <button class="btn btn-outline-danger btn-sm" id="btnEditCliente"><i class="far fa-edit"></i></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -50,7 +63,7 @@
                                 <div class="row">
                                     <div class="col-lg-3">Sub Total:</div>
                                     <div class="col-lg-8">
-                                        <input type="number" class="form-control text-right" value="0.00" readonly
+                                        <input type="text" onblur="number_format (this.value, 2,'.',',',this.id)" class="form-control text-right" value="0.00" readonly
                                         name="sub_total" id="sub_total">
                                     </div>
                                 </div>
@@ -95,7 +108,7 @@
                         <div class="col-lg-1">Cant</div>
                         <div class="col-lg-3">
                             <input type="number" class="form-control" name="cantidad" id="cantidad" placeholder="Cantidad">
-                            <!-- <input type="hidden" class="form-control" name="existencia" id="existencia"> -->
+                            <input type="hidden" class="form-control" name="existencia" id="existencia"> 
                         </div>
                         <div class="col-lg-4">
                             <input type="number" class="form-control" name="precio" id="precio" placeholder="Precio" readonly>
@@ -239,6 +252,8 @@
                 console.log(r.existencia);
                 console.log(r.estado);
 
+
+
                 if(r.existencia<=0 || !r.estado){
                     mensaje("Producto No Tiene Existencia o está inactivo",'orange')
                     $("#codigo").val("");
@@ -248,6 +263,8 @@
                     return false;
                 }
 
+
+
                 if(r.precio==0){
                     mensaje("Producto No Tiene PRECIO registrado",'orange')
                     $("#codigo").val("");
@@ -255,7 +272,10 @@
                     $("#precio").val("0.00");
                     $("#codigo").focus();
                     return false;
-                }                
+                }  
+
+
+
 
                 $("#codigo").val(r.codigo);
                 $("#descripcion").val(r.descripcion);
@@ -319,6 +339,16 @@
         $("#sub_total").val({{ enc.sub_total }});
         $("#descuento").val({{ enc.descuento }});
         $("#total").val({{ enc.total }});
+
+        // $('#enc_cliente').select2().select2('val', $('#enc_cliente option:eq(1)').val());
+        // https://select2.org/programmatic-control/add-select-clear-items
+
+
+
+        //   $("#enc_cliente").data('select2').trigger('select', { 
+        //      data: {"id": 16} 
+        //    });
+
     });
 
     function borrar_detalle(id)
@@ -386,5 +416,68 @@
                 }
         });
     }    
+
+    $("form").submit(function(e){
+        var existencia = +$("#existencia").val();
+        var cantidad = +$("#cantidad").val();
+        var sub_total = +$("#sub_total").val();
+        console.log(sub_total);
+
+        // if(cantidad>existencia){
+        //      mensaje("No hay existencia suficiente");
+        //      return false;
+        // }
+
+        if (cantidad===0 || cantidad===null){
+            mensaje("Debe ingresar una Cantidad de Producto",'red');
+            return false;
+        }
+
+    })  
+
+    $("#btnEditCliente").click(function(e){
+        e.preventDefault();
+
+        var idCliente = $("#enc_cliente").val();
+        var url;
+        const qs = "?t=fc";
+        // alert(idCliente)
+
+        if(idCliente===null || idCliente===undefined || idCliente==0){
+            // url = "/fac/clientes/new" + qs;
+            url = "{% url 'fac:fac_cliente_add' %}" + qs
+            //alert(url);
+            // abrir_modal(url);
+        }else{
+            url = "/fac/facturas/clientes/" + idCliente + qs;
+            //alert(url);
+            // abrir_modal(url);
+        }
+        abrir_modal(url);
+        var token = '{{csrf_token}}';
+    });      
+
+$("#popup").on('hidden.bs.modal',function(){
+    const a = $("#id").val()
+    // alert(a)
+    var url="{% url 'api:cliente_list' %}"
+    $.ajax({
+        type:"GET",
+        url:url,
+        success: function(data){
+            console.log(data)
+            $("#enc_cliente").find('option').remove()
+            $("#enc_cliente").append('<option value="0">Seleccione Cliente</option>')
+            for(var i=0;i<data.length;i++){
+                $("#enc_cliente").append(`<option value="${data[i].id}">${data[i].nombres} ${data[i].apellidos} </option>`)
+            }
+            $("#enc_cliente").val(a).change()
+        },
+        error: function(data){
+            console.log(data)
+        }
+    })
+    return false
+})    
 </script>
 {% endblock %}

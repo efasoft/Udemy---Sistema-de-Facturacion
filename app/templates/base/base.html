@@ -70,59 +70,69 @@
                 Opciones de Menú
             </div>
 
+            {% url 'inv:categoria_list' as cat_url %}
+            {% url 'inv:subcategoria_list' as s_cat_url %}
+            {% url 'cmp:compras_list' as cmp_url %}            
+
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Catálogos</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Catálogos de Inventario :</h6>
-                        {% if perms.inv.view_categoria %} 
-                          <a class="collapse-item" href="{% url 'inv:categoria_list' %}">Categorias</a>
-                        {% endif %}
-                        {% if perms.inv.view_subcategoria %} 
-                          <a class="collapse-item" href="{% url 'inv:subcategoria_list' %}">Sub Categorias</a>                        
-                        {% endif %}
-                        {% if perms.inv.view_marca %} 
-                          <a class="collapse-item" href="{% url 'inv:marca_list' %}">Marca</a>   
-                        {% endif %}
-                        {% if perms.inv.view_unidadmedida %} 
-                          <a class="collapse-item" href="{% url 'inv:um_list' %}">Unidad de Medida</a>   
-                        {% endif %}
-                        {% if perms.inv.view_producto %} 
-                          <a class="collapse-item" href="{% url 'inv:producto_list' %}">Producto</a>    
-                        {% endif %}
-                        
-                        <h6 class="collapse-header">Catálogos de Compras :</h6>                       
-                        {% if perms.cmp.view_proveedor %} 
-                          <a class="collapse-item" href="{% url 'cmp:proveedor_list' %}">Proveedores</a>                             
-                        {% endif %}
-                        <h6 class="collapse-header">Catálogos de Facturación:</h6>
+      <li class="nav-item {% if cat_url in request.path or s_cat_url in request.path  %} active {% endif %}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Catálogos</span>
+        </a>
+        <div id="collapseTwo" class="collapse {% if cat_url in request.path or s_cat_url in request.path %} show {% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Catálogos de Inventario</h6>
+            {% if perms.inv.view_categoria %}
+            <a class="collapse-item {% if cat_url in request.path %} active {% endif %}" href="{{cat_url}}">Categorias</a>
+            {% endif %}
+            {% if perms.inv.view_subcategoria %}
+            <a class="collapse-item {% if s_cat_url in request.path %} active {% endif %}" href="{{s_cat_url}}">Sub Categorias</a>
+            {% endif %}
+            {% if perms.inv.view_marca %}
+            <a class="collapse-item" href="{% url 'inv:marca_list' %}">Marca</a>
+            {% endif %}
+            {% if perms.inv.view_unidadmedida %}
+            <a class="collapse-item" href="{% url 'inv:um_list' %}">Unidad Medida</a>
+            {% endif %}
+            {% if perms.inv.view_producto %}
+            <a class="collapse-item" href="{% url 'inv:producto_list' %}">Producto</a>
+            {% endif %}
             
-                        {% if perms.fac.view_cliente %}
-                        <a class="collapse-item" href="{% url 'fac:cliente_list' %}">Clientes</a>
-                        {% endif %}                        
-                    </div>
-                </div>
-            </li>
-      <li class="nav-item">
+            <h6 class="collapse-header">Catálogos de Compras:</h6>
+            
+            {% if perms.cmp.view_proveedor %}
+            <a class="collapse-item" href="{% url 'cmp:proveedor_list' %}">Proveedores</a>
+            {% endif %}
+
+            <h6 class="collapse-header">Catálogos de Facturación:</h6>
+            
+            {% if perms.fac.view_cliente %}
+            <a class="collapse-item" href="{% url 'fac:cliente_list' %}">Clientes</a>
+            {% endif %}
+            <a class="collapse-item" href="{% url 'bases:idiomas' %}">Idiomas</a>
+            <a class="collapse-item" href="{% url 'bases:frases' %}">Frases</a>            
+
+          </div>
+        </div>
+      </li>
+      <li class="nav-item {% if cmp_url in request.path  %} active {% endif %}">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras" aria-expanded="true" aria-controls="collapseCompras">
           <i class="fas fa-fw fa-truck"></i>
           <span>Movimientos</span>
         </a>
-        <div id="collapseCompras" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseCompras" class="collapse {% if cmp_url in request.path  %} show {% endif %}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Entradas</h6>
-            <a class="collapse-item" href="{% url 'cmp:compras_list' %}">Compras</a>
+            <a class="collapse-item {% if cmp_url in request.path  %} active {% endif %}" href="{% url 'cmp:compras_list' %}">Compras</a>
 
             <h6 class="collapse-header">Salidas</h6>
-            <a class="collapse-item" href="{% url 'fac:factura_list' %}">Facturas</a>            
+            <a class="collapse-item" href="{% url 'fac:factura_list' %}">Facturas</a>
+
           </div>
         </div>
       </li>
+
 
             <!-- Nav Item - Utilities Collapse Menu 
             <li class="nav-item">
@@ -491,7 +501,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js"></script>     
 
     <script src="{% static  'base/js/jquery.chained.min.js' %}"></script>
-
+    
+    <script src="{% static  'base/js/efasoft.js' %}"></script>
 
   <script>
     $(document).ready(function () {
@@ -502,7 +513,20 @@
 
   {% block control_modal%}
   <script>
-    function abrir_modal(url)
+    // function abrir_modal(url)
+    // {
+    // 
+    //   $("#popup").load(url, function(){
+    //     $(this).modal({
+    //       backdrop:'static',
+    //       keyboard: false
+    //     })
+    //     $(this).modal('show');
+    //   });
+    //   return false;
+    // }
+
+        function abrir_modal(url)
     {
 
       $("#popup").load(url, function(){
@@ -511,8 +535,55 @@
           keyboard: false
         })
         $(this).modal('show');
-      });
-      return false;
+
+        // Intercepta el envio del formulario y maneja los errores  sin cerrar la ventana modal
+        $("form").on("submit", function (e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                type: form.attr("method"),
+                url: form.attr("action"),
+                data: form.serialize(),
+                headers: {
+                    "X-Requestd-With": "XMLHttpRequest"
+                },
+                success: function (data) {
+                    $.alert({
+                        title:'',
+                        theme:'material',
+                        type:'green',
+                        content: "Registro Guardado Satisfactoriamente",
+                        onAction: function (btnName) {
+                            location.reload();
+                        }
+                    });
+                },
+                error: function (xhr) {
+                // Maneja los errores y muestra los mensajes en la ventana modal
+                var errors = JSON.parse(xhr.responseText).errors;
+                console.log(errors)
+                if (errors) {
+                    var errors = $.parseJSON(errors);
+                    console.log(errors.__all__)
+                    errors = errors.__all__
+
+                    // Iterar sobre los errores
+                    var messages = ""
+                    for (var i = 0; i < errors.length; i++) {
+
+                        // Obtener el mensaje de error
+                        var message = errors[i].message;
+                        messages += message + "\n"
+                        // Hacer algo con el mensaje
+                    }
+
+                    mensaje(messajes)    
+                }
+                }
+            });
+        });
+    });
+    return false;
     }
 
     function cerrar_modal()

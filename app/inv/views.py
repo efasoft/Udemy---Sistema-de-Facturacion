@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -12,6 +12,8 @@ from .forms import CategoriaForm, SubCategoriaForm, MarcaForm, \
   UMForm, ProductoForm
 
 from bases.views import SinPrivilegios
+from django.http import JsonResponse
+
 
 
 class CategoriaView(SinPrivilegios, generic.ListView):
@@ -207,19 +209,21 @@ def um_inactivar(request, id):
 
 
 class ProductoView(SinPrivilegios, generic.ListView):
-    permission_required = "inv.view_producto"            
     model = Producto
     template_name = "inv/prducto_list.html"
     context_object_name = "obj"
+    permission_required="inv.view_producto"
 
 
-class ProductoNew(SinPrivilegios, generic.CreateView):
-    permission_required = "inv.add_producto"                
+class ProductoNew(SuccessMessageMixin,SinPrivilegios,
+                   generic.CreateView):
     model=Producto
     template_name="inv/producto_form.html"
     context_object_name = 'obj'
     form_class=ProductoForm
     success_url= reverse_lazy("inv:producto_list")
+    success_message="Producto Creado"
+    permission_required="inv.add_producto"
 
     def form_valid(self, form):
         form.instance.uc = self.request.user
@@ -230,6 +234,16 @@ class ProductoNew(SinPrivilegios, generic.CreateView):
         context["categorias"] = Categoria.objects.all()
         context["subcategorias"] = SubCategoria.objects.all()
         return context
+    
+    def form_invalid(self, form):
+        is_ajax = self.request.headers.get('X-Requested-With')== 'XMLHttpRequest'
+        if is_ajax:
+            errors = form.errors.as_json()
+            return JsonResponse({'errors': errors}, status=400)
+        else:
+            return super().form_invalid(form)
+
+        
 
 
 
@@ -254,6 +268,14 @@ class ProductoEdit(SinPrivilegios, generic.UpdateView):
         context["obj"] = Producto.objects.filter(pk=pk).first()
 
         return context
+    
+    def form_invalid(self, form):
+        is_ajax = self.request.headers.get('X-Requested-With')== 'XMLHttpRequest'
+        if is_ajax:
+            errors = form.errors.as_json()
+            return JsonResponse({'errors': errors}, status=400)
+        else:
+            return super().form_invalid(form)        
       
 
 @login_required(login_url="/login/")

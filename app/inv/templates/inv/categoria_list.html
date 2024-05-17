@@ -23,6 +23,10 @@
       {% if not obj %} 
       <div class="alert alert-info">No hay categorías</div>
       {% else %} 
+      <div class="buttons-toolbar">
+        <a class="btn btn-success" href="{% url 'inv:categoria_new' %}"><i cass="far fa-calendar-plus"></i> Agregar Nueva <b>CATEGORÍA</a>
+      </div>
+      <br>
       <table class="table table-striped table-hover">
           <thead>
               <th>Id</th>
